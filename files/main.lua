@@ -16,6 +16,7 @@ function _init()
 
     --sprite variables
     shp_spr=1
+	blt_spr = 51 --ship bullet
 
     --enemy explosion
     enemy_hit=0
@@ -62,12 +63,11 @@ function _draw()
 	cls(0)
 
 	spr(shp_spr,x_s,y_s)--ship
-	spr(16,x_b,y_b) --enemy bullet
-    spr(20, shp_bul_x, shp_bul_y) --my bullet
+	spr(16,x_b,y_b) --enemy 
+    spr(blt_spr, shp_bul_x, shp_bul_y) --my bullet
     spr(expls_spr, expls_x, expls_y) -- enemy explosion
     circfill(x_s+3,y_s,muzzle,7)
     
-	--draw_blt()
 end
 
 function reset_blt()
@@ -75,10 +75,5 @@ function reset_blt()
 	y_b = -4
 end
 
-function draw_blt()
-	for i=1,10 do
-		spr(2,x_b,y_b)
-		reset_blt()
-	end
-end
+
 

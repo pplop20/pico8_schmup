@@ -41,6 +41,10 @@ function ship_shoot_update()
         muzzle=4
     end
     shp_bul_y=shp_bul_y-6
+    blt_spr=blt_spr+1
+    if blt_spr>55 then
+        blt_spr=51
+    end
     
 end
 
