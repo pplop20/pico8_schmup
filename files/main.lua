@@ -2,9 +2,7 @@
 function _init()
 	cls(0)
 	
-	x_s = 10
-	y_s = 60
-	
+
 	reset_blt()
 	
 	v_shp_x = 0
@@ -15,7 +13,7 @@ function _init()
     shp_bul_y = 164
 
     --sprite variables
-    shp_spr=1
+    shp_spr=1 
 	blt_spr = 51 --ship bullet
 
     --enemy explosion
@@ -28,52 +26,95 @@ function _init()
     
     --muzzle
     muzzle=0
+
+	--score
+	score=30000
+	lives=3
+	heart_spr=11
+	bomb_spr=26
+	bombs=2
+
+	--starfield
+	star_color=1
+	starx={}
+	stary={}
+	star_s={}
+
+	for i=1,100 do 
+		add(starx,flr(rnd(128)))
+		add(stary,flr(rnd(128)))
+		add(star_s,rnd(2)+0.5)
+	end
+
+	--game start/game over
+	mode = "start"
+
 end
 
 function _update()
-    shp_spr=1
-	-- movement of ship
-
-    ship_move_update()
-
-    -- enemy bullet movement
-	y_b=y_b+s_b
-    
-	--bullet hit
-	if abs(x_s-x_b)<4 and abs(y_s-y_b)<4 then
-		x_s=64
-		y_s=64
-        sfx(1)
-		
-		reset_blt()
+	if mode=="game" then
+		update_game()
+	elseif mode=="start" then
+		update_start()
 	end
-	
-	if y_b>=128 then
-		reset_blt()
-	end
-	
-    ship_shoot_update()
-    animate_muzzle()
-    was_enemy_hit()
-    animate_explosion()
-	
 end
 
 function _draw()
-	cls(0)
-
-	spr(shp_spr,x_s,y_s)--ship
-	spr(16,x_b,y_b) --enemy 
-    spr(blt_spr, shp_bul_x, shp_bul_y) --my bullet
-    spr(expls_spr, expls_x, expls_y) -- enemy explosion
-    circfill(x_s+3,y_s,muzzle,7)
-    
+	if mode=="game" then
+		draw_game()
+	elseif mode=="start" then
+		draw_start()
+	end
 end
+
+function start_game()
+	mode="game"
+
+	--game start variables
+
+	--ship
+	x_s = 64
+	y_s = 64
+end
+
+
 
 function reset_blt()
 	x_b = rnd(120)
 	y_b = -4
 end
 
+function startfield()
+	for i=1,#starx do 
+		local scol=6
+		if star_s[i]<1 do 
+			scol=1
+		elseif star_s[i]<1.5 do 
+			scol=13
+		else 
+			line(starx[i], stary[i], starx[i], stary[i]-3)
+		end
+		pset(starx[i],stary[i],scol)
+	end
+end
+
+function update_star_color()
+	star_color=rnd(8)
+end
+
+function stars_move()
+	for i=1,#starx do 
+		local sy=stary[i]
+
+		sy=sy+star_s[i]
+		if sy>128 then 
+			sy=sy-128
+		end
+		stary[i]=sy
+	end
+end
+
+-- one star is starx[i]=x, stary[i]=y, for it to move i would need to 
+-- update their y value
 
 
